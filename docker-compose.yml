@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: attraction2024.azurecr.io/postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=2023
+      - POSTGRES_DB=postgresqldb
+    ports:
+      - "5432:5432"
+
+
+  attraction:
+    image: attraction2024.azurecr.io/attraction:latest
+    container_name: attraction
+    environment:
+      DATABASE_URL: postgres://postgres:2023@postgres/postgresqldb
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+
+  attraction-frontend:
+    image: attraction2024.azurecr.io/attraction-frontend:latest
+    container_name: attraction-frontend
+    depends_on:
+      - attraction
+    ports:
+      - "3000:3000"
